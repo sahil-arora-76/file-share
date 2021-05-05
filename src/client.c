@@ -49,7 +49,7 @@ char *help_source =  "----------------------------\n"
 "clear - clear the screen\n"
 "sls - list the file/dir from the server\n"
 "sload [path to download] - load (download) the file to your pc \n"
-"fstats [file/folder name] - show the stats of a file or folder \n"
+"sstats [file/folder name] - show the stats of a file or folder \n"
 "----------------------------\n";
 
 
