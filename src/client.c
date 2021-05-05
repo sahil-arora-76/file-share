@@ -19,6 +19,7 @@
 #define PUT 2 
 #define DELETE 3
 #define BUFFERSIZE 100 
+#define cleart() printf("\033[H\033[J")
 
 typedef struct PATH
 {
@@ -38,7 +39,7 @@ struct connection
 
 typedef int (*fp)(char **, struct connection *);
 
-char *help =  "----------------------------\n"
+char *help_source =  "----------------------------\n"
 "A Simple File Transfer Made By notadevps\n"
 "refer https://github.com/notadevps for more info\n" 
 "built in commands -:\n" 
@@ -227,6 +228,24 @@ int sstat(char **str, struct connection *c)
     return 1;
 }
 
+int clear(char **str, struct connection *c) 
+{
+    if (system("clear"))
+    {
+        cleart();
+        return 1;
+    } else 
+    {
+        return 1;
+    }
+}
+
+int quit(char **str, struct connection *c) 
+{
+    exit(1);
+    return 1;
+}
+
 int sload(char **str, struct connection *c) 
 {
     char *path = str[1]; 
@@ -329,48 +348,25 @@ int sopen(char **str, struct connection *c)
     return 1;
 }
 
-void gen_help() 
+int help(char **str, struct connection *c) 
 {
-    printf("%s", help);
+    printf("%s", help_source);
+    return 1;
 }
 
-char *defaults[] = { "sls", "sopen", "exit", "clear", "help", "sdownload", "sload", "sstat" };
+char *defaults[] = { "sls", "sopen", "quit", "clear", "help", "sload", "sstat" };
+fp array[10] = { sls, sopen, quit, clear, help, sload, sstat };
 
 int execute(char **str, struct connection *addr) 
 {
-
-    if (strcmp(defaults[0], str[0]) == 0) 
+    for (int i = 0; i < 7; i++) 
     {
-        sls(str, addr);
-        return 1;
-    } else if (strcmp(defaults[1], str[0] ) == 0)
-    {
-        sopen(str, addr);
-        return 1;
-    } else if (strcmp(defaults[2], str[0]) == 0) 
-    {
-        exit(0);
-    } else if (strcmp(defaults[3], str[0]) == 0)
-    {
-        system("clear");
-        return 1;
-    } else if (strcmp(defaults[4], str[0]) == 0) 
-    {
-        gen_help();
-        return 1;
-    } else if (strcmp(defaults[5], str[0]) == 0 || strcmp(defaults[6], str[0]) == 0)
-    {
-        sload(str, addr);
-        return 1;
-    } else if (strcmp(defaults[7], str[0]) == 0) 
-    {
-        sstat(str, addr);
-        return 1;
-    } else 
-    {
-        printf("command not found. use 'help' for more info\n");
-        return 1;
+        if (strcmp(str[0], defaults[i]) == 0)
+        {
+            array[i](str, addr);
+        }
     }
+    return 1;
 }
 
 void signal_callback_handler(int s) 

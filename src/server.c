@@ -19,6 +19,12 @@
 #define DELETE 3
 #define HEAD 4
 
+// int get_size(); 
+// void main() 
+// {
+//     return "thr";
+// }
+
 int get_size(char *direc);
 const char *get_type();
 typedef struct REQUEST
@@ -48,6 +54,19 @@ GET CODES
 
 -1 -> dir or file doesn't exist
 */
+
+
+void removeChar(char* s, char c)
+{
+ 
+    int j, n = strlen(s);
+    for (int i = j = 0; i < n; i++)
+        if (s[i] != c)
+            s[j++] = s[i];
+ 
+    s[j] = '\0';
+}
+
 
 int get_file_size(char *direc) 
 {
@@ -270,6 +289,8 @@ char *download_file(char *r)
 }
 
 
+
+
 char *send_res(req *r) 
 {
     char *homedir = getpwuid(getuid())->pw_dir;
@@ -287,7 +308,7 @@ char *send_res(req *r)
         strcat(homedir, r->path);
         char *s = read_dir(homedir);
         return s;
-    } else if (r->method == 1) 
+    } else if (r->method == 1 && r->body == NULL) 
     {
         int size = strlen(r->path); 
         if (r->path[size - 1] == '/') 
@@ -307,7 +328,7 @@ char *send_res(req *r)
         strcat(homedir, r->path);
         char *s = info(homedir);
         return s;
-    }
+    } 
     return NULL;
 }
 
@@ -357,7 +378,7 @@ req parse(char *str, size_t length)
     }
     method[i] = '\0';
     compare(method, &r);
-
+    free(method);
     /*path parsing*/ 
     str = str + index + 1;
     m = strstr(str, (char *)&space);
@@ -369,15 +390,10 @@ req parse(char *str, size_t length)
     }
     r.path[i] = '\0';
 
-    if (r.method != 0) 
-    {
-        r.body = str; 
-    } else 
-    {
-        r.body = NULL;
-    }
+    r.body = NULL;
     return r;
 }
+
 void display_image(int new_sock, req *q)
 {
     const char *image_type = get_type();
@@ -469,6 +485,7 @@ int main(int argc, char **argv)
     while(1) 
     {
         char buffer[502];
+
         recv(new_sock, buffer, 502, 0);
         req p_sts = parse(buffer, strlen(buffer));
         if (strcmp(p_sts.path, "/exit") == 0)
@@ -511,6 +528,12 @@ int main(int argc, char **argv)
         if (err.code != -1)
         {
             free(m);
+            free(p_sts.path);
+            if (p_sts.body != NULL)
+            {
+                free(p_sts.body);
+            }
+
         }
         err.code = 0; 
         flag = 0; 
