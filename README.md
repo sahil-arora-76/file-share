@@ -49,6 +49,6 @@ Open File From Server
 File Info 
 
 
-# Comming Soon 
+# Coming Soon 
 
 delete and upload files in server
