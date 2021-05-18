@@ -23,7 +23,7 @@ run client
 
 by default port is 8080 
 
-every in build command has a prefix of 's'
+every in built command has a prefix of 's'
 
 # Commands
 
