@@ -27,7 +27,7 @@ every in built command has a prefix of 's'
 
 # Commands
 
-shelp -> Lists all the in build commands 
+shelp -> Lists all the in built commands 
 
 sopen -> it changes the directory/file
 
