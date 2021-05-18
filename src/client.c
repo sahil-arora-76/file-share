@@ -19,7 +19,7 @@
 #define PUT 2 
 #define DELETE 3
 #define BUFFERSIZE 100 
-#define cleart() printf("\033[H\033[J")
+#define clear_t() printf("\033[H\033[J")
 
 typedef struct PATH
 {
@@ -43,10 +43,10 @@ char *help_source =  "----------------------------\n"
 "A Simple File Transfer Made By notadevps\n"
 "refer https://github.com/notadevps for more info\n" 
 "built in commands -:\n" 
-"sopen [file/folder name] - open a dir or file from server\n"
-"exit - exit from shell\n"
-"help - all built in commands\n"
-"clear - clear the screen\n"
+"sopen [file/folder name] - open a dir or file from server if you want to go back one dir use ..\n"
+"squit - exit from shell\n"
+"shelp - all built in commands\n"
+"sclear - clear the screen\n"
 "sls - list the file/dir from the server\n"
 "sload [path to download] - load (download) the file to your pc \n"
 "sstats [file/folder name] - show the stats of a file or folder \n"
@@ -232,7 +232,7 @@ int clear(char **str, struct connection *c)
 {
     if (system("clear"))
     {
-        cleart();
+        clear_t();
         return 1;
     } else 
     {
