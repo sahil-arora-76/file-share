@@ -1,17 +1,24 @@
 #include <unistd.h>
 #include <stdio.h>
-#include <sys/socket.h>
+
+#ifdef _WIN32 
+    #include <winsock2.h>
+    #pragma comment(lib,"ws2_32.lib")
+#else 
+    #include <sys/socket.h>
+    #include <arpa/inet.h>
+    #include <sys/types.h>
+    #include <netinet/in.h>
+    #include <sys/stat.h>
+    #include <sys/sendfile.h>
+#endif
+
 #include <stdlib.h>
-#include <netinet/in.h>
 #include <string.h>
-#include <arpa/inet.h>
 #include <string.h>
-#include <sys/types.h>
 #include <pwd.h>
 #include <dirent.h> 
-#include <sys/stat.h>
 #include <fcntl.h>
-#include <sys/sendfile.h>
 #include <time.h>
 #define GET 0
 #define POST 1
@@ -20,10 +27,6 @@
 #define HEAD 4
 
 // int get_size(); 
-// void main() 
-// {
-//     return "thr";
-// }
 
 int get_size(char *direc);
 const char *get_type();
@@ -443,7 +446,16 @@ int main(int argc, char **argv)
     struct sockaddr_in addr; 
     const int port = 8080; 
     int new_sock;
+    if (!argv[1]) return -1; 
 
+    #ifdef _WIN32 
+        WSADATA wsa;
+        if (WSAStartup(MAKEWORD(2,2),&wsa) != 0)
+        {
+            printf("Failed. Error Code : %d",WSAGetLastError());
+            return 1;
+        }
+    #endif 
     sockfd = socket(AF_INET, SOCK_STREAM, 0); 
     if (sockfd < 0) 
     {
@@ -451,15 +463,18 @@ int main(int argc, char **argv)
         exit(1); 
     }
     
-    rc = setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &val, sizeof(yes));
-    if (rc < 0) 
-    {
-        printf("failed: setsockopt()"); 
-        exit(1); 
-    }
+    #ifdef __linux__
+        rc = setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &val, sizeof(yes));
+        if (rc < 0) 
+        {
+            printf("failed: setsockopt()"); 
+            exit(1); 
+        }
+    #endif
+
     addr.sin_family = AF_INET; 
     addr.sin_port = htons(port); 
-    addr.sin_addr.s_addr = inet_addr("192.168.29.5"); 
+    addr.sin_addr.s_addr = inet_addr(argv[1]); 
     
     rc = bind(sockfd, (struct sockaddr *)&addr, sizeof(addr));
     if (rc < 0) 
@@ -538,8 +553,12 @@ int main(int argc, char **argv)
         err.code = 0; 
         flag = 0; 
     }
-    
-    close(sockfd);
+    #ifdef __WIN32 
+        closesocket(s);
+        WSACleanup();
+    #else 
+        close(sockfd);
+    #endif
 
     return 0; 
 }

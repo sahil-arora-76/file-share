@@ -270,7 +270,7 @@ int sload(char **str, struct connection *c)
     }
     s = "\n\n";
     m = strstr(buffer, &s[0]); 
-    rc = download_file(path, buffer, strlen(buffer));
+    rc = download_file(path, m, strlen(m));
     if (rc == -1) 
     {
         printf("%s doesn't exist\n", path); 
@@ -354,7 +354,7 @@ int help(char **str, struct connection *c)
     return 1;
 }
 
-char *defaults[] = { "sls", "sopen", "quit", "clear", "help", "sload", "sstat" };
+char *defaults[] = { "sls", "sopen", "squit", "sclear", "shelp", "sload", "sstat" };
 fp array[10] = { sls, sopen, quit, clear, help, sload, sstat };
 
 int execute(char **str, struct connection *addr) 
