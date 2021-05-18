@@ -39,7 +39,7 @@ sclear -> clear the screen
 
 sload -> download file from the server it requires path and name of file as  arguments
 
-sstat -> print's detailed info of a file
+sstats -> print's detailed info of a file
 
 # features
 Download File From Server 
