@@ -4,7 +4,7 @@ Share Files Over A Network
 
 
 # Note
-This Project Is Not Fully Completed Yet But You Are Free To Use It and Report Issues
+This Project Is Not Fully Completed Yet But You Are Free To Use It.
 
 
 # Use
