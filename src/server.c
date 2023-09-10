@@ -437,7 +437,7 @@ int main(int argc, char **argv)
     int yes = 1; 
     const void *val = &yes;
     struct sockaddr_in addr; 
-    const int port = 8080; 
+    const int port = 4000; 
     int new_sock;
     if (!argv[1]) return -1;
 
@@ -484,6 +484,7 @@ int main(int argc, char **argv)
         char buffer[502];
 
         recv(new_sock, buffer, 502, 0);
+        printf("%s", buffer);
         req p_sts = parse(buffer, strlen(buffer));
         if (strcmp(p_sts.path, "/exit") == 0)
         {

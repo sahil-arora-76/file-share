@@ -177,8 +177,8 @@ int sls(char **str, struct connection *c)
     char buffer[8000];
 
     char req[500]; 
-    snprintf(req, sizeof(req), "GET %s HTTP/1.1 \r\n\r\n", global_path.path);
-    
+    snprintf(req, sizeof(req), "GET %s HTTP/1.1\r\n\r\n", global_path.path);
+    printf("%s", req);
     rc = send(c->fd, &req[0], strlen(req), 0);
     if (rc < 0) 
     {
@@ -186,7 +186,7 @@ int sls(char **str, struct connection *c)
         exit(1);
     }
     read(c->fd, buffer, 8000);
-
+    printf("%s", buffer);
     char *s = "\n\n";
     char *m = strstr(buffer, &s[0]); 
     memmove(&m[1], &m[2], strlen(m) - 1);

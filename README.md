@@ -3,9 +3,6 @@ A linux based file-transfer system in terminal.
 Share Files Over A Network 
 
 
-# Note
-This Project Is Not Fully Completed Yet But You Are Free To Use It.
-
 
 # Use
 
@@ -16,12 +13,13 @@ cd build
 run server 
 
 ```./server [ip] ```
+default port can be changed in the file server.c
 
 run client
 
-```./client [ip]```
+```./client [ip] [port]```
 
-by default port is 8080 
+by default port is 4000 
 
 every in built command has a prefix of 's'
 
@@ -48,7 +46,3 @@ Open File From Server
 
 File Info 
 
-
-# Coming Soon 
-
-delete and upload files in server
